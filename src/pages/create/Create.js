@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import Select from 'react-select'
 import { useCollection } from '../../hooks/useCollection'
+import Select from 'react-select'
+
 // styles
 import './Create.css'
 
@@ -21,20 +22,34 @@ export default function Create() {
   const [dueDate, setDueDate] = useState('')
   const [category, setCategory] = useState('')
   const [assignedUsers, setAssignedUsers] = useState([])
+  const [formError, setFormError] = useState(null)
 
+  // create user values for react-select
   useEffect(() => {
     if (documents) {
-      const options = documents.map((user) => {
-        return { value: user, label: user.displayName }
-      })
-      setUsers(options)
+      setUsers(
+        documents.map((user) => {
+          return { value: { ...user, id: user.id }, label: user.displayName }
+        })
+      )
     }
   }, [documents])
+  // console.log(users)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setFormError(null)
 
-    console.log(name, details, dueDate, category.value, assignedUsers.value)
+    if (!category) {
+      setFormError('Please select a project category.')
+      return
+    }
+    if (assignedUsers.length < 1) {
+      setFormError('Please assign the project to at least 1 user')
+      return
+    }
+
+    console.log(name, details, dueDate, category.value, assignedUsers)
   }
 
   return (
@@ -70,19 +85,22 @@ export default function Create() {
         <label>
           <span>Project category:</span>
           <Select
-            options={categories}
             onChange={(option) => setCategory(option)}
+            options={categories}
           />
         </label>
         <label>
           <span>Assign to:</span>
           <Select
-            options={users}
             onChange={(option) => setAssignedUsers(option)}
+            options={users}
             isMulti
           />
         </label>
+
         <button className='btn'>Add Project</button>
+
+        {formError && <p className='error'>{formError}</p>}
       </form>
     </div>
   )
