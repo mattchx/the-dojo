@@ -13,6 +13,7 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import { useAuthContext } from './hooks/useAuthContext'
 import { Redirect } from 'react-router-dom'
+import OnlineUsers from './components/OnlineUsers'
 
 function App() {
   const { user, authIsReady } = useAuthContext()
@@ -46,6 +47,7 @@ function App() {
               </Route>
             </Switch>
           </div>
+          {user && <OnlineUsers />}
         </BrowserRouter>
       )}
     </div>
