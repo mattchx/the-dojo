@@ -42,7 +42,7 @@ export default function Login() {
           Logging in
         </button>
       )}
-      {error && <div>{error}</div>}
+      {error && <div className='error'>{error}</div>}
     </form>
   )
 }
